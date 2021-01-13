@@ -8,5 +8,5 @@ COPY app /app
 COPY cmd.sh /
 
 USER 1000:1000
-EXPOSE 9090 9191
+EXPOSE 5000 9090 9191
 CMD ["/cmd.sh"]
