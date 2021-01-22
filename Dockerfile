@@ -2,7 +2,7 @@ FROM python:3.4
 
 RUN groupadd --gid 1000 -r uwsgi && useradd --uid 1000 -r -g uwsgi uWSGI
 
-RUN pip install Flask==0.10.1 uWSGI
+RUN pip install Flask==0.10.1 uWSGI requests
 WORKDIR /app
 COPY app /app
 COPY cmd.sh /
