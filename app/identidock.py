@@ -1,9 +1,11 @@
 from flask import Flask, Response, request
 import requests
 import urllib.parse
+import redis
 
 app = Flask(__name__)
 default_name = 'Dale Bewley'
+cache = redis.StrictRedis(host='redis', port=6379, db=0)
 
 @app.route('/', methods=['GET', 'POST'])
 def mainpage():
@@ -29,6 +31,23 @@ def get_identicon(name):
 	image = r.content
 
 	return Response(image, mimetype='image/png')
+
+#@app.route('/monster/<name>')
+#def get_identicon(name):
+#    name = html.escape(name, quote=True)
+    # Проверка наличия текущего значения переменной в кеше
+#    image = cache.get(name)
+    # При промахе кеша возвращает None. В этом случае изображение
+    ## генерируется как обычно, а кроме того выводится некоторая отл-
+    ### адочная информация
+#    if image is None:
+#        print("Cache miss", flush=True)
+#        r = requests.get('http://dnmonster:8080/monster/' + name + '?size=80')
+        #image = r.content
+        # пиктограмма добавляется в кеш и связывается с именем
+        #cache.set(name, image)
+
+    #return Response(image, mimetype='image/png')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
