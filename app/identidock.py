@@ -2,6 +2,7 @@ from flask import Flask, Response, request
 import requests
 import urllib.parse
 import redis
+import html
 
 app = Flask(__name__)
 default_name = 'Dale Bewley'
@@ -11,7 +12,7 @@ cache = redis.StrictRedis(host='redis', port=6379, db=0)
 def mainpage():
 	name = default_name
 	if request.method == 'POST':
-		name = request.form['name']
+		name = html.escape( request.form['name'], quote=True )
 
 	header = '<html><head><title>Identidock</title></head><body>'
 	body = '''<form method="POST">
@@ -27,7 +28,7 @@ def mainpage():
 
 @app.route('/monster/<name>')
 def get_identicon(name):
-	r = requests.get('http://dnmonster:8080/monster/' + name + '?size=80')
+	r = requests.get('http://dnmonster:8080/monster/' + html.escape( name, quote=True ) + '?size=80')
 	image = r.content
 
 	return Response(image, mimetype='image/png')
